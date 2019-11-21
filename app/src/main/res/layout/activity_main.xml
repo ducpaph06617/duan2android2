@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity"
+    android:orientation="vertical">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+     android:orientation="vertical"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+     <com.google.android.material.appbar.AppBarLayout
+         android:id="@+id/appbar"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@color/white"
+         >
+         <androidx.coordinatorlayout.widget.CoordinatorLayout
+             android:layout_width="match_parent"
+             android:layout_height="60dp"
+             app:layout_scrollFlags="exitUntilCollapsed|scroll"
+             app:contentScrim="?attr/colorPrimary"
+             >
+            <LinearLayout
+                android:background="@color/greenPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <com.arlib.floatingsearchview.FloatingSearchView
+                    android:layout_centerVertical="true"
+                    android:id="@+id/floating_search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:floatingSearch_searchHint="Tìm kiếm..."
+                    app:floatingSearch_suggestionsListAnimDuration="250"
+                    app:floatingSearch_showSearchKey="false"
+                    app:floatingSearch_leftActionMode="showHamburger"
+                    app:floatingSearch_menu="@menu/menu_main"
+                    app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+            </LinearLayout>
+         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+         <com.google.android.material.appbar.CollapsingToolbarLayout
+             android:id="@+id/cc"
+             android:layout_width="match_parent"
+             android:layout_height="64dp"
+             app:layout_scrollFlags="exitUntilCollapsed"
+             >
+             <androidx.cardview.widget.CardView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 app:cardElevation="5dp"
+                 android:elevation="5dp"
+                 >
+                 <com.roughike.bottombar.BottomBar
+                     app:layout_collapseMode="pin"
+                     android:id="@+id/bottomBar"
+                     android:layout_width="match_parent"
+                     android:layout_height="64dp"
+                     android:layout_alignParentBottom="true"
+                     android:background="@color/white"
+                     app:bb_tabXmlResource="@xml/top_navigation"
+                     app:bb_behavior="shifting"
+                     app:bb_inActiveTabAlpha="0.7"
+                     app:bb_inActiveTabColor="#43a047"
+                     app:bb_activeTabColor="#43a047"
+                     app:bb_titleTypeFace="fonts/font_1.ttf"
+                     app:bb_titleTextAppearance="@style/CustomTitleTextAppearance"/>
+             </androidx.cardview.widget.CardView>
+         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+     </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/c1"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="@color/greenPrimary">
+         <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+             <FrameLayout
+                 android:id="@+id/viewpager"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 >
+             </FrameLayout>
+         </RelativeLayout>
+     </androidx.core.widget.NestedScrollView>
+
+
+
+
+ </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+
+
+</LinearLayout>

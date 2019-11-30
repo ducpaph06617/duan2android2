@@ -77,11 +77,12 @@ public class Fragment_Home extends BaseFragment {
 
 
     private DatabaseReference mDatabase;
-    private StorageReference storageRef;
+    //private StorageReference storageRef;
     private FirebaseStorage storage;
     private ArrayList<String> path = new ArrayList<>();
     private ArrayList<String> uri = new ArrayList<>();
     private ArrayList<User.cartsp> giohangArray = new ArrayList<>();
+
     private CardView cvForMan;
     private TextView btnMoreman;
 
@@ -586,6 +587,7 @@ public class Fragment_Home extends BaseFragment {
     public void clickproduct(final User.Product product) {
         if (!offer.contains(product.getIdsp())){
             offer.add(product.getIdsp());
+
         }
        if (!offer.isEmpty()){
          if (id!=null){
@@ -661,6 +663,7 @@ public class Fragment_Home extends BaseFragment {
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                                 getcart();
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -669,7 +672,20 @@ public class Fragment_Home extends BaseFragment {
                 }
             }
         });
-
+         muangay.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                    User.Product productBuy = new User.Product();
+                    String idU = productBuy.getIdU();
+                 if (id == null) {
+                     Toast.makeText(getActivity(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+                 } else if(id.equals(idU)){
+                     Toast.makeText(getActivity(), "Không thể mua sản phẩm của mình", Toast.LENGTH_SHORT).show();
+                 }else {
+                     Toast.makeText(getActivity(), "Đéo mua được!!! vì chưa có thông báo cho thằng bán", Toast.LENGTH_LONG).show();
+                 }
+             }
+         });
 
         txtloai = dialog.findViewById(R.id.txtloai);
         txttinhtrang = dialog.findViewById(R.id.txttinhtrang);

@@ -25,7 +25,6 @@
 
     <!--Home fragment-->
     <string name="booth_suggest">Đề xuất cho bạn</string>
-    <string name="booth_new">Mới nhất</string>
     <string name="booth_for_man">Dành cho nam</string>
     <string name="booth_for_girl">Dành cho nữ</string>
     <string name="btmore">Xem Thêm</string>
@@ -52,7 +51,7 @@
     <string name="count">Tổng cộng:</string>
     <string name="money">0đ</string>
     <string name="except">Xác nhận</string>
-
+    <string name="booth_new">Mới nhất</string>
 
     <!--nav_menu-->
     <string name="information">Thông tin tài khoản</string>

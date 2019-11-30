@@ -45,6 +45,7 @@
             android:name=".AddProductActivity"
             android:theme="@style/Create"></activity>
         <activity android:name=".ProductManagementActivity"
+            android:allowBackup="true"
             android:theme="@style/Create"> </activity>
     </application>
 

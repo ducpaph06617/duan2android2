@@ -1,5 +1,6 @@
 package com.dev.duan2android2;
 
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -241,7 +242,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     public Dialog dialog(int layoutid, int height) {
-        android.app.Dialog dialog = new android.app.Dialog(this, R.style.CustomDialog);
+        Dialog dialog = new android.app.Dialog(this, R.style.CustomDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(layoutid);
         dialog.setCanceledOnTouchOutside(false);

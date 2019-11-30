@@ -302,6 +302,7 @@ public class AddProductActivity extends AppCompatActivity {
                 btnDangsp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        String idU = id;
                         String nameshop = edtTenshop.getText().toString().trim();
                         String nameproduc = edtTensp.getText().toString().trim();
                         String price = edtGia.getText().toString().trim();
@@ -340,7 +341,7 @@ public class AddProductActivity extends AppCompatActivity {
                             return;
                         }
                         Calendar calendar = Calendar.getInstance();
-                        User.Product product = new User.Product(nameshop, nameproduc, price, data, neww, statuss, des, "sp:" + calendar.getTimeInMillis(), uri.get(0), listLoai.get(position), soluong, String.valueOf(calendar.getTimeInMillis()));
+                        User.Product product = new User.Product(idU,nameshop, nameproduc, price, data, neww, statuss, des, "sp:" + calendar.getTimeInMillis(), uri.get(0), listLoai.get(position), soluong, String.valueOf(calendar.getTimeInMillis()));
 
                         List<String> sp = new ArrayList<>();
                         sp.clear();
@@ -351,6 +352,7 @@ public class AddProductActivity extends AppCompatActivity {
                         mDatabase.child("id").child("User").child("sp").child(sp.get(0)).setValue(uri);
                         mDatabase.child("id").child(sp.get(0)).child("product").child("product").setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
+
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(AddProductActivity.this, "Đăng thành công", Toast.LENGTH_SHORT).show();
                                 System.exit(0);

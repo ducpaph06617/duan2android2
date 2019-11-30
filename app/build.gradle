@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url 'https://plugins.gradle.org/m2/'}
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.4, 0.99.99]'
@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.dev.duan2android2"
         manifestPlaceholders = [
-                onesignal_app_id: 'c849fb8f-fde7-49c5-890e-3416bb66a104',
+                onesignal_app_id               : 'c849fb8f-fde7-49c5-890e-3416bb66a104',
                 // Project number pulled from dashboard, local value is ignored.
                 onesignal_google_project_number: 'REMOTE'
         ]
@@ -28,6 +28,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -47,9 +48,10 @@ dependencies {
 //    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.1'
+
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
-    implementation 'com.google.firebase:firebase-messaging:12.0.1'
+
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.miguelcatalan:materialsearchview:1.4.0'
@@ -75,3 +77,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 apply plugin: 'com.google.gms.google-services'
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck(true)

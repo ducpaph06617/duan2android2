@@ -50,7 +50,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:windowIsFloating">true</item>
     </style>
-
+    <style name="PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/anim2</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
     <style name="PauseDialog" parent="@style/AppTheme">
         <item name="android:windowAnimationStyle">@style/PauseDialogAnimation</item>
         <item name="android:layout_width">match_parent</item>
@@ -58,10 +61,6 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
-    <style name="PauseDialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/anim2</item>
-        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
-    </style>
 
     <style name="PauseDialog1" parent="@style/AppTheme">
         <item name="android:windowAnimationStyle">@style/PauseDialogAnimation1</item>

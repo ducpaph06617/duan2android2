@@ -72,6 +72,7 @@ public class User {
     }
     public static class Product{
 
+        public String idU;
         public String nameshop;
         public String nameproduct;
         public String priceproduct;
@@ -87,7 +88,8 @@ public class User {
         public Product() {
         }
 
-        public Product(String nameshop, String nameproduct, String priceproduct, String colorproduct, String lovestatus, String status, String describe, String idsp, String uri, String loaisp, String soluong, String thoigian) {
+        public Product(String idU,String nameshop, String nameproduct, String priceproduct, String colorproduct, String lovestatus, String status, String describe, String idsp, String uri, String loaisp, String soluong, String thoigian) {
+            this.idU = idU;
             this.nameshop = nameshop;
             this.nameproduct = nameproduct;
             this.priceproduct = priceproduct;
@@ -100,6 +102,14 @@ public class User {
             this.loaisp = loaisp;
             this.soluong = soluong;
             this.thoigian = thoigian;
+        }
+
+        public String getIdU() {
+            return idU;
+        }
+
+        public void setIdU(String idU) {
+            this.idU = idU;
         }
 
         public String getNameshop() {

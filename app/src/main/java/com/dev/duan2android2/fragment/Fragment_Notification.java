@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dev.duan2android2.R;
 import com.dev.duan2android2.adapter.NotifiAdapter;
+import com.dev.duan2android2.notification.Token;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.util.ArrayList;
@@ -30,15 +34,18 @@ public class Fragment_Notification extends BaseFragment {
     private NotifiAdapter notifiAdapter = new NotifiAdapter(Fragment_Notification.this, strings);
     private RecyclerView rvNotifi;
     private LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+    private FirebaseUser fuser;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
         view = inflater.inflate(R.layout.fragment_notification, container, false);
         rvNotifi = view.findViewById(R.id.rvNotifi);
         rvNotifi.setAdapter(notifiAdapter);
         rvNotifi.setLayoutManager(llm);
         strings.clear();
+//        updateToken(FirebaseInstanceId.getInstance().getToken());
         mDatabase.child("notifi").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -69,6 +76,7 @@ public class Fragment_Notification extends BaseFragment {
         });
         return view;
     }
+
     public void dialogNotifi(int position){
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_notifi);
@@ -76,4 +84,9 @@ public class Fragment_Notification extends BaseFragment {
         tvNoidung.setText(strings.get(position));
         dialog.show();
     }
+//    private void updateToken(String token){
+//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+//        Token token1 = new Token(token);
+//        reference.child(fuser.getUid()).setValue(token1);
+//    }
 }

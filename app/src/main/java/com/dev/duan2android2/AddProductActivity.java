@@ -286,10 +286,10 @@ public class AddProductActivity extends AppCompatActivity {
 
         final ArrayList<String> listLoai = new ArrayList<>();
         listLoai.add("Chọn loại");
-        listLoai.add("Quần áo nam");
-        listLoai.add("Quần áo nữ");
-        listLoai.add("Điện thoại");
-        listLoai.add("Đồ gia dụng");
+        listLoai.add("Thời trang");
+        listLoai.add("Đồ điện tử");
+        listLoai.add("Thực phẩm");
+        listLoai.add("Khác");
 
 
 
@@ -311,35 +311,34 @@ public class AddProductActivity extends AppCompatActivity {
                         final String neww = sharedPreferences.getString("new", "");
                         String statuss = sharedPreferences.getString("status", "");
                         if (listLoai.get(position).equalsIgnoreCase("Chọn loại")) {
+                            Toast.makeText(AddProductActivity.this, "Chọn Loại!!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
                         if (nameshop.equals("")) {
                             return;
                         }
                         if (nameproduc.equals("")) {
+                            edtTensp.setError("Chưa nhập tên!!!");
                             return;
                         }
                         if (price.equals("")) {
+                            edtGia.setError("Chưa nhập giá!!!");
                             return;
                         }
                         if (soluong.equals("")) {
+                            edtTensp.setError("Chưa nhập số lượng!!!");
                             return;
                         }
                         if (des.equals("")) {
+                            edtMota.setError("Chưa nhập mô tả!!!");
                             return;
                         }
                         if (uri.isEmpty()) {
+                            Toast.makeText(AddProductActivity.this, "Chọn Ảnh!!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        if (listcolor.isEmpty()) {
-                            return;
-                        }
-                        if (neww.equals("")) {
-                            return;
-                        }
-                        if (statuss.equals("")) {
-                            return;
-                        }
+
                         Calendar calendar = Calendar.getInstance();
                         User.Product product = new User.Product(idU,nameshop, nameproduc, price, data, neww, statuss, des, "sp:" + calendar.getTimeInMillis(), uri.get(0), listLoai.get(position), soluong, String.valueOf(calendar.getTimeInMillis()));
 
@@ -352,7 +351,6 @@ public class AddProductActivity extends AppCompatActivity {
                         mDatabase.child("id").child("User").child("sp").child(sp.get(0)).setValue(uri);
                         mDatabase.child("id").child(sp.get(0)).child("product").child("product").setValue(product).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(AddProductActivity.this, "Đăng thành công", Toast.LENGTH_SHORT).show();
                                 System.exit(0);

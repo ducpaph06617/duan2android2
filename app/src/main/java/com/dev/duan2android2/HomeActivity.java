@@ -1,12 +1,15 @@
 package com.dev.duan2android2;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +27,7 @@ import com.dev.duan2android2.fragment.Fragment_Cart;
 import com.dev.duan2android2.fragment.Fragment_Home;
 import com.dev.duan2android2.fragment.Fragment_Menu;
 import com.dev.duan2android2.fragment.Fragment_Notification;
+import com.dev.duan2android2.notification.ConnectionReceiver;
 import com.dev.duan2android2.user.User;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -31,7 +35,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.onesignal.OneSignal;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import java.security.MessageDigest;
@@ -50,7 +53,9 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
     List<String> strings=new ArrayList<>();
     FirebaseUser user;
     private ListView listView;
-
+//    APIService apiService;
+//   FirebaseUser fuser;
+//    boolean notify = false;
 
 
     @Override
@@ -59,11 +64,8 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
         setContentView(R.layout.activity_main);
 
 
+//        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
-        OneSignal.startInit(this)
-                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                .unsubscribeWhenNotificationsAreDisabled(true)
-                .init();
 
         Bungee.zoom(this);
         floatingSearchView=findViewById(R.id.floating_search_view);
@@ -94,7 +96,61 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
         mapped();
         onclickView();
         getcart();
+        checkInternetConnection();
+//        User.Product product = new User.Product();
+//        final String msg = "Xác nhận đơn hàng" + product.getNameproduct();
+//        final String re = product.getIdU();
+//        mDatabase = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+//        mDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User.Info user = dataSnapshot.getValue(User.Info.class);
+//                sendNotification(re,user.getPhone(),msg);
+//                notify = false;
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//            });
     }
+//    private void sendNotification(final String re, final String username, final String message){
+//        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+//        Query query = tokens.orderByKey().equalTo(re);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                    Token token = snapshot.getValue(Token.class);
+//                    Data data = new Data(fuser.getUid(),R.mipmap.ic_launcher,username+":"+message,"new message",id);
+//
+//                    Sender sender = new Sender(data,token.getToken());
+//
+//                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+//                        @Override
+//                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+//                            if(response.code() == 200){
+//                                if(response.body().success!=1){
+//                                    Toast.makeText(HomeActivity.this, "Faild", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<MyResponse> call, Throwable t) {
+//
+//                        }
+//                    });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     //ánh xạ view
     private void mapped() {
@@ -108,6 +164,37 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
     }
 
     //các sự kiện click
+    private void checkInternetConnection() {
+
+        boolean ret = ConnectionReceiver.isConnected();
+
+        if (ret != true) {
+            showNetworkSettingsAlert();
+        }
+    }
+
+    public void showNetworkSettingsAlert() {
+             AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+            alertDialog.setTitle("Internet Error!!!");
+             alertDialog.setMessage("Turn on the internet?");
+             alertDialog.setPositiveButton("Go setting",
+                         new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                             Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                             HomeActivity.this.startActivity(intent);
+                          }
+         });
+           alertDialog.setNegativeButton("Cancle",
+                      new DialogInterface.OnClickListener() {
+         public void onClick(DialogInterface dialog, int which) {
+                        System.exit(0);
+                         dialog.cancel();
+                }
+        });
+           alertDialog.show();
+        }
+
+
 
     private void onclickView() {
 

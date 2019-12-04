@@ -1,7 +1,10 @@
 package com.dev.duan2android2.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,17 +26,27 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dev.duan2android2.HomeActivity;
 import com.dev.duan2android2.R;
 import com.dev.duan2android2.adapter.GridAdapter;
 import com.dev.duan2android2.adapter.ImageAdapter;
 import com.dev.duan2android2.adapter.ProductAdapter;
+import com.dev.duan2android2.notification.Client;
+import com.dev.duan2android2.notification.Data;
+import com.dev.duan2android2.notification.MyResponse;
+import com.dev.duan2android2.notification.Sender;
+import com.dev.duan2android2.notification.Token;
 import com.dev.duan2android2.user.User;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -41,6 +54,10 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_Home extends BaseFragment {
     private RecyclerView recyclerviewProductBoy;
@@ -77,6 +94,9 @@ public class Fragment_Home extends BaseFragment {
 
 
     private DatabaseReference mDatabase;
+    APIService apiService;
+    FirebaseUser fuser;
+    boolean notify = false;
     //private StorageReference storageRef;
     private FirebaseStorage storage;
     private ArrayList<String> path = new ArrayList<>();
@@ -163,7 +183,7 @@ public class Fragment_Home extends BaseFragment {
         recyclerviewProductBoy.setLayoutManager(linearLayoutManager);
         recyclerviewProductGirl.setLayoutManager(linearLayoutManager1);
         recyclerviewProductPhone.setLayoutManager(getLinearLayoutManager2);
-        recyclerviewProductHouseware.setLayoutManager(getLinearLayoutManager3);
+      recyclerviewProductHouseware.setLayoutManager(getLinearLayoutManager3);
         recyclerviewProductnew.setLayoutManager(getGetLinearLayoutManager4);
         recyclerviewoffer.setLayoutManager(getGetGetLinearLayoutManager5);
         recyclerviewProductBoy.setAdapter(productAdapter);
@@ -211,8 +231,70 @@ public class Fragment_Home extends BaseFragment {
             }
         });
         getoffer();
+        //notific();
+
 
         return view;
+    }
+    private void notific(){
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+        User.Product product = new User.Product();
+        final String msg = "Xác nhận đơn hàng" + product.getNameproduct();
+        final String re = product.getIdU();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("id").child("User").child(fuser.getProviderId());
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User.Info user = dataSnapshot.getValue(User.Info.class);
+                if(notify) {
+                    sendNotification(re, user.getPhone(), msg);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendNotification(final String re, final String username, final String message){
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(re);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(fuser.getUid(),R.mipmap.ic_launcher,username+":"+message,"new message",id);
+
+                    Sender sender = new Sender(data,token.getToken());
+
+                    apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+                        @Override
+                        public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                            if(response.code() == 200){
+                                if(response.body().success!=1){
+                                    Toast.makeText(getActivity(), "Faild", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void mapped() {
@@ -240,10 +322,11 @@ public class Fragment_Home extends BaseFragment {
     private void getiduser() {
 
         path.clear();
-        final String nam = "Quần áo nam";
-        final String nu = "Quần áo nữ";
-        final String dienthoai = "Điện thoại";
-        final String dogiadung = "Đồ gia dụng";
+        final String nam = "Đồ điện tử";
+        final String nu = "Thời trang";
+        final String dienthoai = "Thực phẩm";
+        final String dogiadung = "Khác";
+
         products.clear();
         productsgirl.clear();
         productnew.clear();
@@ -461,7 +544,7 @@ public class Fragment_Home extends BaseFragment {
         ImageView left;
         TextView textView;
         textView = dialog.findViewById(R.id.nameshop);
-        textView.setText("Điện thoại");
+        textView.setText("Thực phẩm");
         left = dialog.findViewById(R.id.left);
         left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -613,7 +696,7 @@ public class Fragment_Home extends BaseFragment {
 
         left = dialog.findViewById(R.id.left);
         intgio = dialog.findViewById(R.id.intgio);
-        themvaogio = dialog.findViewById(R.id.themvaogio);
+
         muangay = dialog.findViewById(R.id.muangay);
         giohang = dialog.findViewById(R.id.giohang);
         layout = dialog.findViewById(R.id.layout);
@@ -635,54 +718,84 @@ public class Fragment_Home extends BaseFragment {
 
             }
         });
-        themvaogio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (id == null) {
-                    Toast.makeText(getActivity(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    if (!giohangArray.isEmpty()) {
-                        for (int i = 0; i < giohangArray.size(); i++) {
-                            if (product.getIdsp().equalsIgnoreCase(giohangArray.get(i).getIdsp())) {
-                                check = true;
-                                Toast.makeText(getActivity(), "Sản phẩm đã tồn tại trong giỏ hàng", Toast.LENGTH_SHORT).show();
-                                break;
-                            } else {
-                                check = false;
-                            }
-                        }
-                    }
-                    if (check == false) {
-                        giohangArray.clear();
-                        User.cartsp cartsp = new User.cartsp();
-                        cartsp.setIdsp(product.getIdsp());
-                        cartsp.setSoluong("1");
-                        mDatabase.child("id").child("User").child(id).child("cart").child(calendar1.getTimeInMillis() + "").setValue(cartsp).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
-                                getcart();
-                                dialog.dismiss();
-                            }
-                        });
-                    }
-
-
-                }
-            }
-        });
+//        themvaogio.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (id == null) {
+//                    Toast.makeText(getActivity(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
+//                } else {
+//
+//                    if (!giohangArray.isEmpty()) {
+//                        for (int i = 0; i < giohangArray.size(); i++) {
+//                            if (product.getIdsp().equalsIgnoreCase(giohangArray.get(i).getIdsp())) {
+//                                check = true;
+//                                Toast.makeText(getActivity(), "Sản phẩm đã tồn tại trong giỏ hàng", Toast.LENGTH_SHORT).show();
+//                                break;
+//                            } else {
+//                                check = false;
+//                            }
+//                        }
+//                    }
+//                    if (check == false) {
+//                        giohangArray.clear();
+//                        User.cartsp cartsp = new User.cartsp();
+//                        cartsp.setIdsp(product.getIdsp());
+//                        cartsp.setSoluong("1");
+//                        mDatabase.child("id").child("User").child(id).child("cart").child(calendar1.getTimeInMillis() + "").setValue(cartsp).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void aVoid) {
+//                                Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+//                                getcart();
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                    }
+//
+//
+//                }
+//            }
+//        });
          muangay.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                     User.Product productBuy = new User.Product();
+
                     String idU = productBuy.getIdU();
+
+                    notify = true;
+
                  if (id == null) {
                      Toast.makeText(getActivity(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
                  } else if(id.equals(idU)){
                      Toast.makeText(getActivity(), "Không thể mua sản phẩm của mình", Toast.LENGTH_SHORT).show();
                  }else {
-                     Toast.makeText(getActivity(), "Đéo mua được!!! vì chưa có thông báo cho thằng bán", Toast.LENGTH_LONG).show();
+                     if (!giohangArray.isEmpty()) {
+                         for (int i = 0; i < giohangArray.size(); i++) {
+                             if (product.getIdsp().equalsIgnoreCase(giohangArray.get(i).getIdsp())) {
+                                 check = true;
+                                 Toast.makeText(getActivity(), "Sản phẩm đã tồn tại trong giỏ hàng", Toast.LENGTH_SHORT).show();
+                                 break;
+                             } else {
+                                 check = false;
+                             }
+                         }
+                     }
+                     if (check == false) {
+                         giohangArray.clear();
+                         User.cartsp cartsp = new User.cartsp();
+                         cartsp.setIdsp(product.getIdsp());
+                         cartsp.setSoluong("1");
+                         mDatabase.child("id").child("User").child(id).child("cart").child(calendar1.getTimeInMillis() + "").setValue(cartsp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                             @Override
+                             public void onSuccess(Void aVoid) {
+
+                                 Toast.makeText(getActivity(), "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+                                 getcart();
+                                 dialog.dismiss();
+
+                             }
+                         });
+                     }
                  }
              }
          });

@@ -175,8 +175,8 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
 
     public void showNetworkSettingsAlert() {
              AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
-            alertDialog.setTitle("Internet Error!!!");
-             alertDialog.setMessage("Turn on the internet?");
+             alertDialog.setTitle("Không có Internet!!!");
+             alertDialog.setMessage("Turn on?");
              alertDialog.setPositiveButton("Go setting",
                          new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -272,7 +272,7 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Log.e("KEY","a");
+
                 }
 
                 @Override
@@ -282,7 +282,7 @@ public class HomeActivity extends BaseActivity implements Toolbar.OnMenuItemClic
 
                 @Override
                 public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    Log.e("KEY","c");
+
                 }
 
                 @Override

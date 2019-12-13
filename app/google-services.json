@@ -44,11 +44,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "904299717357-3ubmd0l9edkp4mcho54g9h763cu8gcjg.apps.googleusercontent.com",
+          "client_id": "904299717357-1kjrlb9j3jur8dbvsljd41e75v5t243t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.duan2android2",
+            "certificate_hash": "f2f9f720b38190c1585cd3d4262ab5d46811ad1a"
+          }
+        },
+        {
+          "client_id": "904299717357-tvqg9g9v239vliuc93a726cmjasefd8m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.dev.duan2android2",
             "certificate_hash": "5bc5bfc5363ee7b9fa40e57f0fe5edb15cd7c6ac"
+          }
+        },
+        {
+          "client_id": "904299717357-i7co8915d9cbs1hsf6cvkrdvnagtu97b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dev.duan2android2",
+            "certificate_hash": "54804a833a6b51cb46d7fa917208a329ae67866a"
           }
         },
         {

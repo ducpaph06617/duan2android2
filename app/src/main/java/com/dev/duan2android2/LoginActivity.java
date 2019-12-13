@@ -58,7 +58,7 @@ public class LoginActivity extends BaseActivity {
 
     //Ánh xạ
     private void mapped() {
-        loginButton = findViewById(R.id.login_button);
+
         callbackManager = CallbackManager.Factory.create();
         mAuth = FirebaseAuth.getInstance();
         sharedPreferences = getSharedPreferences("Data", MODE_PRIVATE);
@@ -72,25 +72,7 @@ public class LoginActivity extends BaseActivity {
     //Các sự kiện onClick
     private void onclick() {
 
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-                finish();
-            }
 
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-
-
-        });
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override

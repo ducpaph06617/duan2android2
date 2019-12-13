@@ -173,7 +173,7 @@ public class ProductManagementActivity extends AppCompatActivity {
 
 
     public void clickprodut(){
-        Toast.makeText(this, "Đang phát triển", Toast.LENGTH_SHORT).show();
+
 
     }
 }

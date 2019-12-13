@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="greenPrimary">#43a047</color>
-    <color name="greenDark">#00701a</color>
-    <color name="greenLight">#76d275</color>
+    <color name="greenPrimary">#01a2ff</color>
+    <color name="greenDark">#0074cb</color>
+    <color name="greenLight">#69d3ff</color>
 
     <color name="white">#FFF</color>
 
